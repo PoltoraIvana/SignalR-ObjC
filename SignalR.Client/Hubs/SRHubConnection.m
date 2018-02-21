@@ -101,8 +101,12 @@
     SRHubResult *result = [[SRHubResult alloc] init];
     [result setError:error];
     
-    for (SRHubConnectionHubResultBlock callback in [self.callbacks allValues]) {
-        callback(result);
+    NSArray *keys = self.callbacks.allKeys;
+    for (NSString *key in keys) {
+        SRHubConnectionHubResultBlock callback = [self.callbacks objectForKey:key];
+        if (callback) {
+            callback(result);
+        }
     }
     
     [self.callbacks removeAllObjects];
